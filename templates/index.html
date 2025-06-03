@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Calorie Watch</title>
+</head>
+<body>
+    <h1>Calorie Watch</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" />
+        <button type="submit">Analyze</button>
+    </form>
+    <pre id="result"></pre>
+    <script>
+        const form = document.getElementById('upload-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = form.querySelector('input[name="file"]');
+            if (!fileInput.files.length) return;
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            const res = await fetch('/analyze', { method: 'POST', body: formData });
+            const data = await res.json();
+            document.getElementById('result').textContent = data.result;
+        });
+    </script>
+</body>
+</html>
